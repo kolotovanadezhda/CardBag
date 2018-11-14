@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDEDED"
+    android:orientation="vertical"
+    android:fontFamily="@font/roboto"
+    tools:context=".CardListActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:minHeight="?android:attr/actionBarSize">
+
+    </android.support.v7.widget.Toolbar>
+    
+    <RelativeLayout
+        android:id="@+id/NoCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto"
+            android:lineHeight="16sp"
+            android:text="Нет карт"
+            android:textColor="#333333"
+            android:textSize="24sp"
+            android:layout_above="@id/txtDescription"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="24dp"
+            android:gravity="center"
+            android:padding="17dp"
+            android:fontFamily="@font/roboto"
+            android:text="Нажмите плюс, чтобы добавить первую карту"
+            android:textColor="#333333"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+    </android.support.v7.widget.RecyclerView>
+    
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAddCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:backgroundTint="#009788"
+        android:onClick="onShow"
+        android:src="@drawable/ic_action_add_card"
+        />
+
+</RelativeLayout>

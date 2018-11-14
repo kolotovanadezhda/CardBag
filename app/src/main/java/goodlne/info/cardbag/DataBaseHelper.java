@@ -5,9 +5,16 @@ import java.util.List;
 
 public class DataBaseHelper {
 
-    private static List<Category> categories;
-
-    public static List<Category> chats = Arrays.asList(
-       new Category(1, "Супермаркеты")
+    public static List<Category> categories = Arrays.asList(
+            new Category(1, "Одежда и обувь"),
+            new Category(2, "Супермаркеты"),
+            new Category(3, "Красота"),
+            new Category(4, "Автомобиль")
     );
+
+    public static List<Card> cards = Arrays.asList();
+
+    public static List <Category> getCategories() {
+        return categories;
+    }
 }
