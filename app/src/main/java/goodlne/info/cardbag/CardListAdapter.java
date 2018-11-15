@@ -6,14 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import java.util.List;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
     private LayoutInflater inflater;
-    private Card card;
+    private List<Card> cards;
 
-    public CardListAdapter(Context context, Card card) {
+    public CardListAdapter(Context context, List<Card> cards) {
         this.inflater = LayoutInflater.from(context);
-        this.card = card;
+        this.cards = cards;
     }
 
     @NonNull
@@ -25,13 +26,17 @@ public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder cardVH, int position) {
-        position = 0;
-        cardVH.txtNameCard.setText(card.getNameCard());
-        cardVH.txtCategoryCard.setText(card.getCategory());
-        cardVH.txtDiscountCard.setText("Скидка " + card.getDiscount() + "%");
+        final Card cardItem = cards.get(position);
+        cardVH.txtNameCard.setText(cardItem.getNameCard());
+        cardVH.txtCategoryCard.setText(cardItem.getCategory());
+        cardVH.txtDiscountCard.setText("Скидка " + cardItem.getDiscount() + "%");
+    }
+    public void insertItem(Card item) {
+        cards.add(item);
+        notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
-        return 1;
+        return cards.size();
     }
 }

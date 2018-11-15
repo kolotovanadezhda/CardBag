@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,8 +16,8 @@ public class AddCard extends AppCompatActivity {
     private Toolbar toolbar;
     private Card card;
     private EditText nameCard;
-    private Button category;
     private EditText procDiscount;
+    private Button category;
 
     private static final int CHOOSE_CATEGORY = 2;
 
@@ -41,11 +39,6 @@ public class AddCard extends AppCompatActivity {
         card = new Card();
     }
 
-    public boolean onCreateOptionsMenu(Menu  menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_card_list, menu);
-        return true;
-    }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
@@ -63,20 +56,25 @@ public class AddCard extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 switch (requestCode) {
                     case CHOOSE_CATEGORY:
-                        String name = data.getStringExtra("category_name");
+                        String name = data.getStringExtra("name");
                         category.setText(name);
 
                 }
             }
         }
 
-    public void onCategoryClick(View view) {
+    public void onAddCard(View view) {
         card.setNameCard(nameCard.getText().toString());
         card.setCategory(category.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
+
+        Intent intent = new Intent(this, CardListActivity.class);
+        intent.putExtra(Card.class.getSimpleName(), card);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
-    public void onAddCard(View view) {
+    public void onCategoryClick(View view) {
         Intent intent = new Intent(this, CategoryListActivity.class);
         startActivityForResult(intent, CHOOSE_CATEGORY);
     }

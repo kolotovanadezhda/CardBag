@@ -13,14 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CardListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView cardList;
     private RelativeLayout noCard;
-    private TextView txtNameCard;
-    private TextView txtCategory;
-    private TextView txtDiscount;
+    private RecyclerView recyclerView;
+    private List<Card> cards;
 
     public static final int REQUEST_CODE_ADD_CARD = 1;
 
@@ -37,9 +39,10 @@ public class CardListActivity extends AppCompatActivity {
         cardList.setVisibility(View.GONE);
         noCard = findViewById(R.id.NoCard);
 
-        txtNameCard = findViewById(R.id.txtNameCard);
-        txtCategory = findViewById(R.id.txtCategory);
-        txtDiscount = findViewById(R.id.txtDiscount);
+        recyclerView = findViewById(R.id.rvCard);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        cards = new ArrayList<>();
     }
 
     @Override
@@ -69,11 +72,9 @@ public class CardListActivity extends AppCompatActivity {
                         return;
                     }
 
-                    RecyclerView recyclerView = findViewById(R.id.rvCard);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-                    CardListAdapter adapter = new CardListAdapter(this, card);
+                    CardListAdapter adapter = new CardListAdapter(this, cards);
                     recyclerView.setAdapter(adapter);
+                    adapter.insertItem(card);
             }
         }
 
