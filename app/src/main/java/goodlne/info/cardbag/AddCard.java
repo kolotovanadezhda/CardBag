@@ -15,11 +15,12 @@ public class AddCard extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Card card;
+
     private EditText nameCard;
     private EditText procDiscount;
     private Button category;
 
-    private static final int CHOOSE_CATEGORY = 2;
+    private static final int REQUEST_CODE_ADD_CATEGORY = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,6 @@ public class AddCard extends AppCompatActivity {
         nameCard = findViewById(R.id.nameCard);
         procDiscount = findViewById(R.id.procDiscount);
         category = findViewById(R.id.btnCategory);
-
-        card = new Card();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -55,15 +54,15 @@ public class AddCard extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 switch (requestCode) {
-                    case CHOOSE_CATEGORY:
+                    case REQUEST_CODE_ADD_CATEGORY:
                         String name = data.getStringExtra("name");
                         category.setText(name);
 
                 }
             }
         }
-
     public void onAddCard(View view) {
+        card = new Card();
         card.setNameCard(nameCard.getText().toString());
         card.setCategory(category.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
@@ -76,6 +75,6 @@ public class AddCard extends AppCompatActivity {
 
     public void onCategoryClick(View view) {
         Intent intent = new Intent(this, CategoryListActivity.class);
-        startActivityForResult(intent, CHOOSE_CATEGORY);
+        startActivityForResult(intent, REQUEST_CODE_ADD_CATEGORY);
     }
 }

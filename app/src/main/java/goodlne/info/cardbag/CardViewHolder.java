@@ -10,14 +10,12 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
     public TextView txtNameCard;
     public TextView txtCategoryCard;
     public TextView txtDiscountCard;
-    public ImageView imageCard;
 
     CardViewHolder (@NonNull View itemView) {
         super(itemView);
         txtNameCard = itemView.findViewById(R.id.txtNameCard);
         txtCategoryCard = itemView.findViewById(R.id.txtCategory);
         txtDiscountCard = itemView.findViewById(R.id.txtDiscount);
-        imageCard = itemView.findViewById(R.id.imageCard);
     }
 
 }

@@ -21,8 +21,9 @@ public class CardListActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView cardList;
     private RelativeLayout noCard;
-    private RecyclerView recyclerView;
+    private RecyclerView rvPhotoCard;
     private List<Card> cards;
+    private CardListAdapter adapter;
 
     public static final int REQUEST_CODE_ADD_CARD = 1;
 
@@ -39,10 +40,11 @@ public class CardListActivity extends AppCompatActivity {
         cardList.setVisibility(View.GONE);
         noCard = findViewById(R.id.NoCard);
 
-        recyclerView = findViewById(R.id.rvCard);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rvPhotoCard=(RecyclerView) findViewById(R.id.rvPhotoCard);
 
         cards = new ArrayList<>();
+
+        cardList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -72,8 +74,8 @@ public class CardListActivity extends AppCompatActivity {
                         return;
                     }
 
-                    CardListAdapter adapter = new CardListAdapter(this, cards);
-                    recyclerView.setAdapter(adapter);
+                    CardListAdapter adapter = new CardListAdapter(this, cards, rvPhotoCard);
+                    cardList.setAdapter(adapter);
                     adapter.insertItem(card);
             }
         }
@@ -81,7 +83,12 @@ public class CardListActivity extends AppCompatActivity {
     }
 
     public void onShow(View view) {
-        Intent intent = new Intent(this, AddCard.class);
-        startActivityForResult(intent, REQUEST_CODE_ADD_CARD);
+        Intent intent;
+        switch (view.getId()) {
+            case R.id.btnAddCard:
+                intent = new Intent(this, AddCard.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_CARD);
+        }
+
     }
 }

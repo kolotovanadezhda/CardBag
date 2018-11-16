@@ -23,19 +23,17 @@
             android:textSize="18sp"
             android:fontFamily="@font/roboto_medium"/>
 
-        <ImageView
-            android:id="@+id/imageCard"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPhotoCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtNameCard"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/card_1" />
+            android:layout_marginTop="?attr/actionBarSize"/>
 
         <TextView
             android:id="@+id/txtCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageCard"
+            android:layout_below="@id/rvPhotoCard"
             android:layout_marginTop="10dp"
             android:text="Супермаркеты"
             android:textColor="#9B9B9B" />
@@ -44,7 +42,7 @@
             android:id="@+id/txtDiscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageCard"
+            android:layout_below="@id/rvPhotoCard"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:text="Скидка 10%"

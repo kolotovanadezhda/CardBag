@@ -2,6 +2,7 @@ package goodlne.info.cardbag;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,14 @@ import java.util.List;
 public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
     private LayoutInflater inflater;
     private List<Card> cards;
+    private RecyclerView rvPhotoCard;
+    private PhotoListAdapter photoListAdapter;
+    private Context context;
 
-    public CardListAdapter(Context context, List<Card> cards) {
+    public CardListAdapter(Context context, List<Card> cards, RecyclerView recyclerView) {
         this.inflater = LayoutInflater.from(context);
         this.cards = cards;
+        this.rvPhotoCard=recyclerView;
     }
 
     @NonNull
@@ -30,13 +35,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
         cardVH.txtNameCard.setText(cardItem.getNameCard());
         cardVH.txtCategoryCard.setText(cardItem.getCategory());
         cardVH.txtDiscountCard.setText("Скидка " + cardItem.getDiscount() + "%");
+        rvPhotoCard.setLayoutManager(new LinearLayoutManager(context));
+        photoListAdapter = new PhotoListAdapter(context, cards);
+        rvPhotoCard.setAdapter(photoListAdapter);
     }
+
     public void insertItem(Card item) {
         cards.add(item);
         notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
+
         return cards.size();
     }
 }

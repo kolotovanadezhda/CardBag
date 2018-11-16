@@ -8,14 +8,12 @@
     android:orientation="vertical"
     tools:context=".AddCard">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FAFAFA"
-        android:elevation="4dp"
-        android:minHeight="?android:attr/actionBarSize">
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FAFAFA" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -35,7 +33,7 @@
         android:id="@+id/btnCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:paddingTop="15dp"
         android:drawableEnd="@drawable/shape"
@@ -45,7 +43,7 @@
         android:textSize="18sp"
         android:textAlignment="textStart"
         android:textAllCaps="false"
-        android:textColor="#9B9B9B" />
+        android:textColor="#9B9B9B"/>
 
     <View
         android:layout_width="match_parent"
@@ -69,6 +67,7 @@
             android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
+
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
@@ -78,15 +77,7 @@
         android:onClick="onAddCard"
         android:text="Сохранить"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:fontFamily="@font/roboto">
-
-    <corners
-        android:bottomLeftRadius="2dp"
-        android:bottomRightRadius="2dp"
-        android:radius="2dp"
-        android:topLeftRadius="2dp"
-        android:topRightRadius="2dp" />
+        android:textSize="14sp">
     </Button>
 
 </LinearLayout>
