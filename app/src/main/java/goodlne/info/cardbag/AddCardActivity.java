@@ -10,8 +10,11 @@ import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class AddCard extends AppCompatActivity {
+
+public class AddCardActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Card card;
@@ -19,6 +22,7 @@ public class AddCard extends AppCompatActivity {
     private EditText nameCard;
     private EditText procDiscount;
     private Button category;
+
 
     private static final int REQUEST_CODE_ADD_CATEGORY = 2;
 
@@ -48,24 +52,29 @@ public class AddCard extends AppCompatActivity {
         }
     }
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-            super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == RESULT_OK) {
-                switch (requestCode) {
-                    case REQUEST_CODE_ADD_CATEGORY:
-                        String name = data.getStringExtra("name");
-                        category.setText(name);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_ADD_CATEGORY:
+                    String name = data.getStringExtra("name");
+                    category.setText(name);
 
-                }
             }
         }
+    }
     public void onAddCard(View view) {
         card = new Card();
         card.setNameCard(nameCard.getText().toString());
         card.setCategory(category.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
+
+        List<Photo> photos = new ArrayList<>();
+        photos.add(new Photo(R.drawable.card_1_front));
+        photos.add(new Photo(R.drawable.card_1_back));
+        card.setPhotos(photos);
 
         Intent intent = new Intent(this, CardListActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);

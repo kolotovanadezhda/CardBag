@@ -8,12 +8,9 @@ import android.widget.ImageView;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
     public ImageView ivCardFront;
-    public ImageView ivCardBack;
-
     public PhotoViewHolder(@NonNull View itemView) {
         super(itemView);
         this.ivCardFront = itemView.findViewById(R.id.imageCardFront);
-        this.ivCardBack = itemView.findViewById(R.id.imageCardBack);
 
     }
 }

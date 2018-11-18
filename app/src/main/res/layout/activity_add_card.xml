@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#EDEDED"
     android:orientation="vertical"
-    tools:context=".AddCard">
+    tools:context=".AddCardActivity">
 
 
     <android.support.v7.widget.Toolbar
