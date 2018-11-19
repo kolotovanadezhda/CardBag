@@ -40,6 +40,8 @@ public class AddCardActivity extends AppCompatActivity {
         nameCard = findViewById(R.id.nameCard);
         procDiscount = findViewById(R.id.procDiscount);
         category = findViewById(R.id.btnCategory);
+
+        card = new Card();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -66,15 +68,15 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
     public void onAddCard(View view) {
-        card = new Card();
-        card.setNameCard(nameCard.getText().toString());
-        card.setCategory(category.getText().toString());
-        card.setDiscount(procDiscount.getText().toString());
 
-        List<Photo> photos = new ArrayList<>();
+        ArrayList<Photo> photos = new ArrayList<>();
         photos.add(new Photo(R.drawable.card_1_front));
         photos.add(new Photo(R.drawable.card_1_back));
         card.setPhotos(photos);
+
+        card.setNameCard(nameCard.getText().toString());
+        card.setCategory(category.getText().toString());
+        card.setDiscount(procDiscount.getText().toString());
 
         Intent intent = new Intent(this, CardListActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);

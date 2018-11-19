@@ -12,16 +12,12 @@ import java.util.List;
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
     private LayoutInflater inflater;
     private List<Photo> photos;
-    //private PhotoListAdapter.onPhotoClickListener clickListener;
-
-    /*public interface onPhotoClickListener{
-        void onPhotoClickListener(Card photo);
-    }*/
+    Context context;
 
     public PhotoListAdapter(Context context, List<Photo> photos) {
         this.photos = photos;
         this.inflater = LayoutInflater.from(context);
-        //this.clickListener = clickListener;
+        this.context = context;
     }
 
     @NonNull
@@ -35,12 +31,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder viewHolder, int position) {
         final Photo photo = photos.get(position);
-        viewHolder.ivCardFront.setImageResource(photo.getImageID());
-        /*viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                clickListener.onPhotoClickListener(photo);
-            }
-        });*/
+        viewHolder.ivCardFront.setImageDrawable(context.getResources().getDrawable(photo.getImageID()));
     }
 
     @Override

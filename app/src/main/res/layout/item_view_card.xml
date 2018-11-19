@@ -25,6 +25,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPhotoCard"
+            android:layout_below="@+id/txtNameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="?attr/actionBarSize"/>

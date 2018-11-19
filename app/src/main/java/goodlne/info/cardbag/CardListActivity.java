@@ -14,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView rvCardList;
     private RelativeLayout noCard;
-    //Context context;
+    private List<Card> cards;
     private CardListAdapter adapter;
 
     public static final int REQUEST_CODE_ADD_CARD = 1;
@@ -34,12 +35,15 @@ public class CardListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Мои карты");
 
-        rvCardList = findViewById(R.id.rvCard);
-        rvCardList.setVisibility(View.GONE);
         noCard = findViewById(R.id.NoCard);
 
+        rvCardList = findViewById(R.id.rvCard);
+        rvCardList.setVisibility(View.GONE);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CardListAdapter(this);
+
+        cards = new ArrayList<>();
+
+        adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
     }
 
