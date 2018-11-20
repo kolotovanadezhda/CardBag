@@ -1,9 +1,5 @@
 package goodlne.info.cardbag;
 
-
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +11,7 @@ public class Card implements Serializable {
 
     public Card()
     {
+
         System.out.println("Constuctor Card\n");
     }
 
@@ -59,5 +56,4 @@ public class Card implements Serializable {
 
         this.discount = discount;
     }
-
 }
