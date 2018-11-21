@@ -71,7 +71,7 @@ public class AddCardActivity extends AppCompatActivity {
 
         ArrayList<Photo> photos = new ArrayList<>();
         photos.add(new Photo(R.drawable.card_1_front));
-        photos.add(new Photo(R.drawable.card_1_back));
+        photos.add(new Photo(R.drawable.card_1_front));
         card.setPhotos(photos);
 
         card.setNameCard(nameCard.getText().toString());

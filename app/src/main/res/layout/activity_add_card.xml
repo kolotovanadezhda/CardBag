@@ -12,8 +12,9 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#FAFAFA" />
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:minHeight="?android:attr/actionBarSize"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -26,11 +27,13 @@
             android:id="@+id/nameCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Название карты" />
+            android:hint="Название карты"
+            android:maxLines="1"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btnCategory"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -38,12 +41,11 @@
         android:paddingTop="15dp"
         android:drawableEnd="@drawable/shape"
         android:onClick="onCategoryClick"
-        style="@style/Widget.AppCompat.Button.Borderless"
         android:text="Категории"
-        android:textSize="18sp"
         android:textAlignment="textStart"
         android:textAllCaps="false"
-        android:textColor="#9B9B9B"/>
+        android:textColor="#9B9B9B"
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
@@ -64,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Процент скидки"
-            android:inputType="number"/>
+            android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -77,7 +79,7 @@
         android:onClick="onAddCard"
         android:text="Сохранить"
         android:textColor="#FFFFFF"
-        android:textSize="14sp">
+        android:textSize="17sp">
     </Button>
 
 </LinearLayout>
