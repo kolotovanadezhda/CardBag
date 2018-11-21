@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_below="@id/toolbar"
     android:layout_margin="10dp">
 
@@ -28,14 +28,14 @@
             android:layout_below="@+id/txtNameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"/>
+            android:layout_marginTop="9dp"/>
 
         <TextView
             android:id="@+id/txtCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/rvPhotoCard"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="9dp"
             android:text="Супермаркеты"
             android:textColor="#9B9B9B" />
 
@@ -45,10 +45,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/rvPhotoCard"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="9dp"
             android:text="Скидка 10%"
             android:textColor="#009788" />
 
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</RelativeLayout>

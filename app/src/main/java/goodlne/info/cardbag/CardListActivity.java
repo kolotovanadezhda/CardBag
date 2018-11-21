@@ -37,11 +37,11 @@ public class CardListActivity extends AppCompatActivity {
 
         noCard = findViewById(R.id.NoCard);
 
+        cards = new ArrayList<>();
+
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setVisibility(View.GONE);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-
-        cards = new ArrayList<>();
 
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
