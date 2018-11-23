@@ -9,7 +9,8 @@ public class DataBaseHelper {
             new Category(1, "Одежда и обувь"),
             new Category(2, "Супермаркеты"),
             new Category(3, "Красота"),
-            new Category(4, "Автомобиль")
+            new Category(4, "Автомобиль"),
+            new Category(5, "Бытовая техника")
     );
 
     public static List<Card> cards = Arrays.asList();
