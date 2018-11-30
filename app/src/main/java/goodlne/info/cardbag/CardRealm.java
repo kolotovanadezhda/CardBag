@@ -1,20 +1,17 @@
 package goodlne.info.cardbag;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class Card implements Serializable {
+public class CardRealm extends RealmObject {
+
+    @PrimaryKey
     private int id;
     private String nameCard;
-    private Category category;
+    private CategoryRealm category;
     private String discount;
-    private ArrayList<Photo> photos;
-
-    public Card()
-    {
-
-        System.out.println("Constuctor Card\n");
-    }
+    private RealmList<Integer> photos;
 
     public int getId() {
         return id;
@@ -32,11 +29,11 @@ public class Card implements Serializable {
         this.nameCard = nameCard;
     }
 
-    public Category getCategory() {
+    public CategoryRealm getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryRealm category) {
         this.category = category;
     }
 
@@ -48,11 +45,11 @@ public class Card implements Serializable {
         this.discount = discount;
     }
 
-    public ArrayList<Photo> getPhotos() {
+    public RealmList<Integer> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<Photo> photos) {
+    public void setPhotos(RealmList<Integer> photos) {
         this.photos = photos;
     }
 }

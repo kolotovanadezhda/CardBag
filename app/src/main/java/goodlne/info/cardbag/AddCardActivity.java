@@ -11,7 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
+
+import io.realm.Realm;
 
 
 public class AddCardActivity extends AppCompatActivity {
@@ -74,14 +76,43 @@ public class AddCardActivity extends AppCompatActivity {
         photos.add(new Photo(R.drawable.card_1_front));
         card.setPhotos(photos);
 
-        card.setNameCard(nameCard.getText().toString());
-        card.setCategory(category.getText().toString());
-        card.setDiscount(procDiscount.getText().toString());
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction(){
+            @Override
+            public void execute(Realm realm) {
+            }
+
+            public void execut(Realm realm){
+                realm.copyToRealmOrUpdate(map2Realm(card));
+                }
+        });
+
+        //card.setNameCard(nameCard.getText().toString());
+        //card.setCategory(category.getText().toString());
+        //card.setDiscount(procDiscount.getText().toString());
+
+        Random random = new Random();
+        int id = random.nextInt(200000);
+        category.setId(id);
 
         Intent intent = new Intent(this, CardListActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
         setResult(RESULT_OK, intent);
         finish();
+    }
+    private CardRealm map2Realm(Card card){
+        CardRealm cardRealm = new CardRealm();
+        cardRealm.setNameCard(card.getNameCard());
+        cardRealm.setDiscount(card.getDiscount());
+        cardRealm.setCategory(categoryMap2Ream(card.getCategory()));
+        return cardRealm;
+    }
+
+    private CategoryRealm categoryMap2Ream(Category category) {
+        CategoryRealm categoryRealm = new CategoryRealm();
+        categoryRealm.setId(category.getId());
+        categoryRealm.setName(category.getName());
+        return categoryRealm;
     }
 
     public void onCategoryClick(View view) {
