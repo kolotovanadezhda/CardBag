@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -23,12 +22,13 @@ public class AddCardActivity extends AppCompatActivity {
     private Card card;
 
     private EditText nameCard;
-    private EditText procDiscount;
     private EditText etCategory;
+    private EditText procDiscount;
 
     private List<Integer> photos;
 
     private static final int REQUEST_CODE_ADD_CATEGORY = 2;
+    private Intent data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +65,11 @@ public class AddCardActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CATEGORY:
-                    String name = data.getStringExtra("name");
-                    etCategory.setText(name);
+                    if(data!=null) {
+                        Category category = data.getParcelableExtra(Category.class.getSimpleName());
+                        card.setCategory(category);
+                        etCategory.setText(category.getName());
+                    }
 
             }
         }
@@ -83,6 +86,7 @@ public class AddCardActivity extends AppCompatActivity {
         Random random = new Random();
         int id = random.nextInt(200000);
         Category category = new Category(id,etCategory.getText().toString());
+        card.setCategory(category);
         card.setCategory(category);
         card.setDiscount(procDiscount.getText().toString());
 

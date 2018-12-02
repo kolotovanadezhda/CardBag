@@ -65,6 +65,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     }
 
     private List<Category> getCategoriesFromRemote() {
+
         return categories;
     }
 
@@ -109,7 +110,6 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     public void onCategoryClick(Category category){
         Intent intent = new Intent(this, AddCardActivity.class);
         intent.putExtra(Category.class.getSimpleName(), category);
-        startActivity(intent);
         setResult(RESULT_OK, intent);
         finish();
     }

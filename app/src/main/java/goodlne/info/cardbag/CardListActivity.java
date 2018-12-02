@@ -69,7 +69,7 @@ public class CardListActivity extends AppCompatActivity {
                         return;
                     }
 
-                    Card card = (Card) arg.getSerializable(Card.class.getSimpleName());
+                    Card card = (Card) arg.getParcelable(Card.class.getSimpleName());
                     if (card == null) {
                         return;
                     }
