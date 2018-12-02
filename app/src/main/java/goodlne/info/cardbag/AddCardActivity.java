@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import io.realm.Realm;
@@ -23,8 +24,9 @@ public class AddCardActivity extends AppCompatActivity {
 
     private EditText nameCard;
     private EditText procDiscount;
-    private Button category;
+    private EditText etCategory;
 
+    private List<Integer> photos;
 
     private static final int REQUEST_CODE_ADD_CATEGORY = 2;
 
@@ -40,8 +42,8 @@ public class AddCardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         nameCard = findViewById(R.id.nameCard);
+        etCategory = findViewById(R.id.etCategory);
         procDiscount = findViewById(R.id.procDiscount);
-        category = findViewById(R.id.btnCategory);
 
         card = new Card();
     }
@@ -64,7 +66,7 @@ public class AddCardActivity extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CATEGORY:
                     String name = data.getStringExtra("name");
-                    category.setText(name);
+                    etCategory.setText(name);
 
             }
         }
@@ -76,24 +78,22 @@ public class AddCardActivity extends AppCompatActivity {
         photos.add(new Photo(R.drawable.card_1_front));
         card.setPhotos(photos);
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction(){
-            @Override
-            public void execute(Realm realm) {
-            }
-
-            public void execut(Realm realm){
-                realm.copyToRealmOrUpdate(map2Realm(card));
-                }
-        });
-
-        //card.setNameCard(nameCard.getText().toString());
-        //card.setCategory(category.getText().toString());
-        //card.setDiscount(procDiscount.getText().toString());
+        card.setNameCard(nameCard.getText().toString());
 
         Random random = new Random();
         int id = random.nextInt(200000);
-        category.setId(id);
+        Category category = new Category(id,etCategory.getText().toString());
+        card.setCategory(category);
+        card.setDiscount(procDiscount.getText().toString());
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction(){
+
+            public void execute(Realm realm){
+
+            }
+        });
+
 
         Intent intent = new Intent(this, CardListActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
@@ -102,6 +102,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
     private CardRealm map2Realm(Card card){
         CardRealm cardRealm = new CardRealm();
+        cardRealm.setId(card.getId());
         cardRealm.setNameCard(card.getNameCard());
         cardRealm.setDiscount(card.getDiscount());
         cardRealm.setCategory(categoryMap2Ream(card.getCategory()));

@@ -40,6 +40,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryViewHolder
         viewHolder.rvCategory.setText(category.getName());
         viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+
                 clickListener.onCategoryClick(category);
             }
         });

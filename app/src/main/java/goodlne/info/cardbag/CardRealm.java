@@ -14,42 +14,52 @@ public class CardRealm extends RealmObject {
     private RealmList<Integer> photos;
 
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public String getNameCard() {
+
         return nameCard;
     }
 
     public void setNameCard(String nameCard) {
+
         this.nameCard = nameCard;
     }
 
     public CategoryRealm getCategory() {
+
         return category;
     }
 
     public void setCategory(CategoryRealm category) {
+
         this.category = category;
     }
 
     public String getDiscount() {
+
         return discount;
     }
 
     public void setDiscount(String discount) {
+
         this.discount = discount;
     }
 
     public RealmList<Integer> getPhotos() {
+
         return photos;
     }
 
     public void setPhotos(RealmList<Integer> photos) {
+
         this.photos = photos;
     }
 }

@@ -1,85 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDEDED"
-    android:orientation="vertical"
-    tools:context=".AddCardActivity">
+    android:orientation="vertical">
 
-
-    <android.support.v7.widget.Toolbar
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FAFAFA"
-        android:minHeight="?android:attr/actionBarSize"/>
-
-    <android.support.design.widget.TextInputLayout
+        android:elevation="4dp"
+        android:minHeight="?android:attr/actionBarSize" />
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp">
-
+        android:layout_height="match_parent">
         <EditText
+            style="@style/etStyle"
             android:id="@+id/nameCard"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Название карты"
-            android:maxLines="1"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/btnCategory"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp"
-        android:drawableEnd="@drawable/shape"
-        android:onClick="onCategoryClick"
-        android:text="Категории"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="#9B9B9B"
-        android:textSize="18sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9B9B9B"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp">
-
+            />
         <EditText
+            style="@style/etStyle"
+            android:maxLines="1"
+            android:layout_below="@id/nameCard"
+            android:id="@+id/etCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Категория"
+            android:drawableRight="@drawable/shape"
+            android:cursorVisible="false"
+            android:longClickable="false"
+            android:onClick="onCategoryClick"
+            android:focusable="false"/>
+        <EditText
+            style="@style/etStyle"
+            android:layout_below="@id/etCategory"
             android:id="@+id/procDiscount"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Процент скидки"
-            android:inputType="number" />
-    </android.support.design.widget.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="#009788"
-        android:onClick="onAddCard"
-        android:text="Сохранить"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp">
-    </Button>
-
+            android:inputType="number"
+            />
+        <Button
+            android:layout_marginTop="28dp"
+            android:background="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:fontFamily="@font/roboto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onAddCard"
+            android:id="@+id/btnSave"
+            android:layout_below="@id/procDiscount"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="15dp"
+            android:text="Сохранить"/>
+    </RelativeLayout>
 </LinearLayout>

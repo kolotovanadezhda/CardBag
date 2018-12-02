@@ -1,8 +1,9 @@
 package goodlne.info.cardbag;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Photo implements Serializable {
+public class Photo implements Parcelable {
 
     private int imageID;
 
@@ -12,8 +13,34 @@ public class Photo implements Serializable {
     }
 
 
+    protected Photo(Parcel in) {
+        imageID = in.readInt();
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
+
     public int getImageID() {
 
         return imageID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(imageID);
     }
 }

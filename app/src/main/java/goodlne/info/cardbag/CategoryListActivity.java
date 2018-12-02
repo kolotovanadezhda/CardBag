@@ -41,22 +41,15 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         List <CategoryRealm> categoriesLocal = null;
         List <Category> categories = new ArrayList<>();
 
-        //categoriesLocal = getCategoriesFromLocal();
-        //categoriesRest = getCategoriesFromRemote();
-
-
-        //if(categoriesLocal == null || categoriesLocal.isEmpty())
-        //{
-            categoriesRest = getCategoriesFromRemote();
-            addCategories(categoriesRest);
-        //}
-
         categoriesRest = getCategoriesFromRemote();
-        if(categoriesRest == null) {
-            Toast.makeText(this, "Ошибка сервера", Toast.LENGTH_LONG).show();
+        addCategories(categoriesRest);
+
+        if (categoriesRest == null){
+            Toast.makeText(this,"Ошибка сервер", Toast.LENGTH_LONG).show();
             return;
         }
-        if(categoriesRest!=null) {
+
+        if (categoriesRest != null){
             addCategories(categoriesRest);
         }
 
@@ -71,10 +64,10 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         return Realm.getDefaultInstance().where(CategoryRealm.class).findAll();
     }
 
-
     private List<Category> getCategoriesFromRemote() {
         return categories;
     }
+
     private List<CategoryRealm> map2RealmList(List<Category> categories) {
         List<CategoryRealm> realmList = new ArrayList<>();
         for(Category category : categories){
@@ -86,26 +79,24 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
 
         return realmList;
     }
-
     private List <Category> map2Data(List<CategoryRealm> realmList) {
         List<Category> categories = new ArrayList<>();
         for(CategoryRealm categoryRealm : realmList) {
             Category category = new Category(
-            categoryRealm.getId(),
-            categoryRealm.getName()
+                    categoryRealm.getId(),
+                    categoryRealm.getName()
             );
             categories.add(category);
         }
         return categories;
 
     }
-
     private void addCategories(List<Category>  list) {
-        List<CategoryRealm> realmList = map2RealmList(list);
+       final List<CategoryRealm> realmList = map2RealmList(list);
         Realm realm = Realm.getDefaultInstance();
         //realm.beginTransaction();
-
         //realm.commitTransaction();
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -114,7 +105,14 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         });
         realm.close();
     }
-
+    @Override
+    public void onCategoryClick(Category category){
+        Intent intent = new Intent(this, AddCardActivity.class);
+        intent.putExtra(Category.class.getSimpleName(), category);
+        startActivity(intent);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,11 +132,4 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         }
     }
 
-        @Override
-    public void onCategoryClick(Category category){
-        Intent intent = new Intent(this, AddCardActivity.class);
-        intent.putExtra("name", category.getName().toString());
-        setResult(RESULT_OK, intent);
-        finish();
-    }
 }
