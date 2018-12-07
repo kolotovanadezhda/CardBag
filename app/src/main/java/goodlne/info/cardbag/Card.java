@@ -2,7 +2,10 @@ package goodlne.info.cardbag;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.EditText;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Card implements Parcelable {
     private int id;
@@ -11,10 +14,16 @@ public class Card implements Parcelable {
     private String discount;
     private ArrayList photos;
 
-    public Card()
-    {
+    public Card(int id, String nameCard, Category category, String discount, ArrayList photos) {
+        this.id = id;
+        this.nameCard = nameCard;
+        this.category = category;
+        this.discount = discount;
+        this.photos = photos;
+    }
 
-        System.out.println("Constuctor Card\n");
+    public Card() {
+
     }
 
 

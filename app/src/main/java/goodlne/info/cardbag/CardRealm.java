@@ -11,7 +11,7 @@ public class CardRealm extends RealmObject {
     private String nameCard;
     private CategoryRealm category;
     private String discount;
-    private RealmList<Integer> photos;
+    private RealmList<PhotoRealm> photos;
 
     public int getId() {
 
@@ -53,13 +53,12 @@ public class CardRealm extends RealmObject {
         this.discount = discount;
     }
 
-    public RealmList<Integer> getPhotos() {
+    public RealmList<PhotoRealm> getPhotos() {
 
         return photos;
     }
 
-    public void setPhotos(RealmList<Integer> photos) {
-
+    public void setPhotos(RealmList<PhotoRealm> photos) {
         this.photos = photos;
     }
 }

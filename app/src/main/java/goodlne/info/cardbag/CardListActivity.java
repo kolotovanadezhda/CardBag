@@ -16,6 +16,10 @@ import android.view.MenuInflater;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+
 public class CardListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -37,14 +41,31 @@ public class CardListActivity extends AppCompatActivity {
 
         noCard = findViewById(R.id.NoCard);
 
-        cards = new ArrayList<>();
-
+        cards = map2Data(getCards());
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setVisibility(View.GONE);
+
+        if (cards == null || cards.isEmpty()){
+            rvCardList.setVisibility(View.GONE);
+            noCard.setVisibility(View.VISIBLE);
+        }
+        else {
+            rvCardList.setVisibility(View.VISIBLE);
+            noCard.setVisibility(View.GONE);
+        }
+
+
+
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
+
+        cards = map2Data(getCards());
+    }
+
+    private RealmResults<CardRealm> getCards() {
+        return Realm.getDefaultInstance().where(CardRealm.class).findAll();
     }
 
     @Override
@@ -88,5 +109,37 @@ public class CardListActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_ADD_CARD);
         }
 
+    }
+    private List<Card> map2Data(List<CardRealm> realmList) {
+        List<Card> cards = new ArrayList<>();
+        for (CardRealm cardRealm : realmList) {
+            Card card = new Card (
+                    cardRealm.getId(),
+                    cardRealm.getNameCard(),
+                    categoryMap2Realm(cardRealm.getCategory()),
+                    cardRealm.getDiscount(),
+                    (ArrayList) photoMap2Realm(cardRealm.getPhotos())
+            );
+            cards.add(card);
+        }
+        return cards;
+    }
+
+    private List<Photo> photoMap2Realm(List<PhotoRealm> realmList) {
+        List<Photo> photos = new ArrayList<>();
+        for (PhotoRealm photoRealm : realmList) {
+            Photo photo = new Photo(
+                    photoRealm.getImageID()
+            );
+            photos.add(photo);
+        }
+        return photos;
+    }
+
+    private Category categoryMap2Realm(CategoryRealm categoryRealm) {
+        Category category = new Category();
+        category.setName(categoryRealm.getName());
+        category.setId(categoryRealm.getId());
+        return category;
     }
 }

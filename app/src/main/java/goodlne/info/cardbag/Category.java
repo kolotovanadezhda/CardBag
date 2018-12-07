@@ -23,14 +23,20 @@ public class Category implements Parcelable {
     public static final Creator<Category> CREATOR = new Creator<Category>() {
         @Override
         public Category createFromParcel(Parcel in) {
+
             return new Category(in);
         }
 
         @Override
         public Category[] newArray(int size) {
+
             return new Category[size];
         }
     };
+
+    public Category() {
+
+    }
 
     public int getId() {
 
@@ -52,5 +58,13 @@ public class Category implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
