@@ -37,27 +37,20 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
        RecyclerView recyclerView = findViewById(R.id.rvCategory);
        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Category> categoriesRest = null;
+        List<Category> categoriesRest = categories;
         List <CategoryRealm> categoriesLocal = null;
         List <Category> categories = new ArrayList<>();
 
-        categoriesLocal = getCategoriesFromLocal();
+        categoriesRest = getCategoriesFromRemote();
+        addCategories(categoriesRest);
 
-        if (categoriesLocal == null || categoriesLocal.isEmpty()) {
-            try {
-                categoriesRest = getCategoriesFromRemote();
-            }
-            catch (NetworkErrorException e){
-                e.printStackTrace();
-            }
+        if (categoriesRest == null){
+            Toast.makeText(this,"Ошибка сервер", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-            if (categoriesRest == null) {
-                Toast.makeText(this, "Ошибка серевера", Toast.LENGTH_LONG).show();
-                return;
-            }
-            if (categoriesRest != null) {
-                addCategories(categoriesRest);
-            }
+        if (categoriesRest != null){
+            addCategories(categoriesRest);
         }
 
         categoriesLocal = getCategoriesFromLocal();
@@ -71,7 +64,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         return Realm.getDefaultInstance().where(CategoryRealm.class).findAll();
     }
 
-    private List<Category> getCategoriesFromRemote() throws NetworkErrorException{
+    private List<Category> getCategoriesFromRemote(){
 
         return DataBaseHelper.categories;
     }

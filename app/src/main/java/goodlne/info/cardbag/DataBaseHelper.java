@@ -13,6 +13,9 @@ public class DataBaseHelper {
             new Category(5, "Бытовая техника")
     );
 
-    public static List<Card> cards = Arrays.asList();
+    public static List<Category> getCategories() {
+
+        return categories;
+    }
 
 }
