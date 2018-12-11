@@ -64,11 +64,9 @@ public class AddCardActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CATEGORY:
-                    if(data!=null) {
                         Category category = data.getParcelableExtra(Category.class.getSimpleName());
                         card.setCategory(category);
                         etCategory.setText(category.getName());
-                    }
 
             }
         }
@@ -96,10 +94,8 @@ public class AddCardActivity extends AppCompatActivity {
         });
         realm.close();
 
-
         Intent intent = new Intent(this, CardListActivity.class);
-        intent.putExtra(Card.class.getSimpleName(), card);
-        setResult(RESULT_OK, intent);
+        startActivity(intent);
         finish();
     }
     private CardRealm cardMap2Realm(Card card){

@@ -18,7 +18,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
 
     public CardListAdapter(Context context, List<Card> cards) {
         this.inflater = LayoutInflater.from(context);
-        this.cards = new ArrayList<>();
+        this.cards = cards;
         this.context = context;
     }
 

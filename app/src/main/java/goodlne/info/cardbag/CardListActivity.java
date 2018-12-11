@@ -69,33 +69,6 @@ public class CardListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_card_list, menu);
         return true;
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_CODE_ADD_CARD:
-                    rvCardList.setVisibility(View.VISIBLE);
-                    noCard.setVisibility(View.GONE);
-
-                    Bundle arg = data.getExtras();
-                    if (arg == null) {
-                        return;
-                    }
-
-                    Card card = (Card) arg.getParcelable(Card.class.getSimpleName());
-                    if (card == null) {
-                        return;
-                    }
-
-                    adapter.insertItem(card);
-            }
-        }
-
-    }*/
-
     public void onShow(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
         startActivity(intent);
