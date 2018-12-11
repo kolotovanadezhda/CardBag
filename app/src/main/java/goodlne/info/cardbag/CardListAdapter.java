@@ -32,14 +32,16 @@ public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder cardVH, int position) {
         final Card cardItem = cards.get(position);
-        cardVH.txtNameCard.setText(cardItem.getNameCard());
-        cardVH.txtCategoryCard.setText(cardItem.getCategory().getName());
-        cardVH.txtDiscountCard.setText("Скидка " + cardItem.getDiscount() + "%");
 
         PhotoListAdapter photoListAdapter = new PhotoListAdapter(context, cardItem.getPhotos());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         cardVH.rvPhotoCard.setLayoutManager(linearLayoutManager);
         cardVH.rvPhotoCard.setAdapter(photoListAdapter);
+
+        cardVH.txtNameCard.setText(cardItem.getNameCard());
+        cardVH.txtCategoryCard.setText(cardItem.getCategory().getName());
+        cardVH.txtDiscountCard.setText("Скидка " + cardItem.getDiscount() + "%");
+
     }
 
     public void insertItem(Card item) {

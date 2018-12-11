@@ -59,6 +59,7 @@ public class CardRealm extends RealmObject {
     }
 
     public void setPhotos(RealmList<PhotoRealm> photos) {
+
         this.photos = photos;
     }
 }

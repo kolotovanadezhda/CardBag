@@ -41,9 +41,10 @@ public class CardListActivity extends AppCompatActivity {
 
         noCard = findViewById(R.id.NoCard);
 
-        cards = map2Data(getCards());
         rvCardList = findViewById(R.id.rvCard);
-        rvCardList.setVisibility(View.GONE);
+        rvCardList.setLayoutManager(new LinearLayoutManager(this));
+
+        cards = map2DataList(getCards());
 
         if (cards == null || cards.isEmpty()){
             rvCardList.setVisibility(View.GONE);
@@ -54,14 +55,8 @@ public class CardListActivity extends AppCompatActivity {
             noCard.setVisibility(View.GONE);
         }
 
-
-
-        rvCardList.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
-
-        cards = map2Data(getCards());
     }
 
     private RealmResults<CardRealm> getCards() {
@@ -75,7 +70,7 @@ public class CardListActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -99,33 +94,30 @@ public class CardListActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 
     public void onShow(View view) {
-        Intent intent;
-        switch (view.getId()) {
-            case R.id.btnAddCard:
-                intent = new Intent(this, AddCardActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ADD_CARD);
-        }
+        Intent intent = new Intent(this, AddCardActivity.class);
+        startActivity(intent);
+        finish();
 
     }
-    private List<Card> map2Data(List<CardRealm> realmList) {
+    private List<Card> map2DataList(List<CardRealm> realmList) {
         List<Card> cards = new ArrayList<>();
         for (CardRealm cardRealm : realmList) {
             Card card = new Card (
                     cardRealm.getId(),
                     cardRealm.getNameCard(),
-                    categoryMap2Realm(cardRealm.getCategory()),
+                    categoryMap2Data(cardRealm.getCategory()),
                     cardRealm.getDiscount(),
-                    (ArrayList) photoMap2Realm(cardRealm.getPhotos())
+                    (ArrayList) photoMap2Data(cardRealm.getPhotos())
             );
             cards.add(card);
         }
         return cards;
     }
 
-    private List<Photo> photoMap2Realm(List<PhotoRealm> realmList) {
+    private List<Photo> photoMap2Data(List<PhotoRealm> realmList) {
         List<Photo> photos = new ArrayList<>();
         for (PhotoRealm photoRealm : realmList) {
             Photo photo = new Photo(
@@ -136,10 +128,10 @@ public class CardListActivity extends AppCompatActivity {
         return photos;
     }
 
-    private Category categoryMap2Realm(CategoryRealm categoryRealm) {
+    private Category categoryMap2Data(CategoryRealm categoryRealm) {
         Category category = new Category();
-        category.setName(categoryRealm.getName());
         category.setId(categoryRealm.getId());
+        category.setName(categoryRealm.getName());
         return category;
     }
 }

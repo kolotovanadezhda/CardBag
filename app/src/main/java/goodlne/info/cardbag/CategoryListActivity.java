@@ -37,24 +37,31 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
        RecyclerView recyclerView = findViewById(R.id.rvCategory);
        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Category> categoriesRest = categories;
+        List<Category> categoriesRest = null;
         List <CategoryRealm> categoriesLocal = null;
         List <Category> categories = new ArrayList<>();
 
-        categoriesRest = getCategoriesFromRemote();
-        addCategories(categoriesRest);
+        categoriesLocal = getCategoriesFromLocal();
 
-        if (categoriesRest == null){
-            Toast.makeText(this,"Ошибка сервер", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (categoriesLocal == null || categoriesLocal.isEmpty()) {
+            try {
+                categoriesRest = getCategoriesFromRemote();
+            }
+            catch (NetworkErrorException e){
+                e.printStackTrace();
+            }
 
-        if (categoriesRest != null){
-            addCategories(categoriesRest);
+            if (categoriesRest == null) {
+                Toast.makeText(this, "Ошибка серевера", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (categoriesRest != null) {
+                addCategories(categoriesRest);
+            }
         }
 
         categoriesLocal = getCategoriesFromLocal();
-        categories = map2Data(categoriesLocal);
+        categories = map2DataList(categoriesLocal);
 
        CategoryListAdapter adapter = new CategoryListAdapter(this, categoriesRest, this);
        recyclerView.setAdapter(adapter);
@@ -64,9 +71,9 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         return Realm.getDefaultInstance().where(CategoryRealm.class).findAll();
     }
 
-    private List<Category> getCategoriesFromRemote() {
+    private List<Category> getCategoriesFromRemote() throws NetworkErrorException{
 
-        return categories;
+        return DataBaseHelper.categories;
     }
 
     private List<CategoryRealm> map2RealmList(List<Category> categories) {
@@ -80,7 +87,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
 
         return realmList;
     }
-    private List <Category> map2Data(List<CategoryRealm> realmList) {
+    private List <Category> map2DataList(List<CategoryRealm> realmList) {
         List<Category> categories = new ArrayList<>();
         for(CategoryRealm categoryRealm : realmList) {
             Category category = new Category(
@@ -95,9 +102,6 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     private void addCategories(List<Category>  list) {
        final List<CategoryRealm> realmList = map2RealmList(list);
         Realm realm = Realm.getDefaultInstance();
-        //realm.beginTransaction();
-        //realm.commitTransaction();
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

@@ -45,6 +45,8 @@ tools:context=".AddCardActivity">
         android:hint="Категория"
         android:drawableEnd="@drawable/shape"
         android:onClick="onCategoryClick"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
         />
 </android.support.design.widget.TextInputLayout>
 

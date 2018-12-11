@@ -35,7 +35,8 @@ public class Category implements Parcelable {
     };
 
     public Category() {
-
+        id = 0;
+        name = null;
     }
 
     public int getId() {
@@ -61,10 +62,12 @@ public class Category implements Parcelable {
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 }

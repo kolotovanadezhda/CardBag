@@ -12,9 +12,9 @@ public class Card implements Parcelable {
     private String nameCard;
     private Category category;
     private String discount;
-    private ArrayList photos;
+    private List<Photo> photos;
 
-    public Card(int id, String nameCard, Category category, String discount, ArrayList photos) {
+    public Card(int id, String nameCard, Category category, String discount, List<Photo> photos) {
         this.id = id;
         this.nameCard = nameCard;
         this.category = category;
@@ -23,7 +23,11 @@ public class Card implements Parcelable {
     }
 
     public Card() {
-
+        id = 0;
+        nameCard = null;
+        category = null;
+        discount = null;
+        photos = null;
     }
 
 
@@ -67,20 +71,24 @@ public class Card implements Parcelable {
         this.discount = discount;
     }
 
-    public ArrayList<Photo> getPhotos() {
-
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<Photo> photos) {
-
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
+
+    public static Creator<Card> getCREATOR() {
+        return CREATOR;
+    }
+
     protected Card(Parcel in) {
         nameCard = in.readString();
         category = (Category) in.readParcelable(Category.class.getClassLoader());
         discount = in.readString();
-        photos = in.readArrayList(Photo.class.getClassLoader());
+        photos = new ArrayList<>();
+        in.readList(photos, getClass().getClassLoader());
     }
     public static final Creator<Card> CREATOR = new Creator<Card>() {
         @Override

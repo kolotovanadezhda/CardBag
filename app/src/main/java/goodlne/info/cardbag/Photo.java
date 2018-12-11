@@ -7,6 +7,11 @@ public class Photo implements Parcelable {
 
     private int imageID;
 
+    public Photo(){
+
+        imageID = 0;
+    }
+
     public Photo(int imageID) {
 
         this.imageID = imageID;
