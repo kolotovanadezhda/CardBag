@@ -1,6 +1,9 @@
 package goodlne.info.cardbag;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +33,14 @@ public class AddCardActivity extends AppCompatActivity {
     private EditText etCategory;
     private EditText procDiscount;
 
-    private static final int REQUEST_CODE_ADD_CATEGORY = 2;
+    private static final int REQUEST_CODE_FRONT_PHOTO = 1;
+    private static final int REQUEST_CODE_BACK_PHOTO = 2;
+
+    ImageView ivPhotoFront, ivPhotoBack;
+
+
+
+    private static final int REQUEST_CODE_ADD_CATEGORY = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +59,33 @@ public class AddCardActivity extends AppCompatActivity {
 
         card = new Card();
 
+
+        // Вешаем на кнопку обработчик нажатий
+        findViewById(R.id.flFrontPhoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChooseImageFromGallery(REQUEST_CODE_FRONT_PHOTO);
+            }
+        });
+
+        findViewById(R.id.flBackPhoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChooseImageFromGallery(REQUEST_CODE_BACK_PHOTO);
+            }
+        });
+
+        ivPhotoFront = findViewById(R.id.ivPhotoFront);
+        ivPhotoBack = findViewById(R.id.ivPhotoBack);
+
+        long currentTime = System.currentTimeMillis();
+        Photo front = new Photo(currentTime+1);
+        Photo back = new Photo(currentTime+2);
+        ArrayList<Photo> photos = new ArrayList<>();
+        photos.add(new Photo(R.drawable.card_1_front));
+        photos.add(new Photo(R.drawable.card_1_front));
+        card.setPhotos(photos);
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -60,27 +101,50 @@ public class AddCardActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CATEGORY:
+                    if (resultCode == RESULT_OK) {
                         Category category = data.getParcelableExtra(Category.class.getSimpleName());
                         card.setCategory(category);
                         etCategory.setText(category.getName());
-
+                    }
+                    break;
+                case REQUEST_CODE_FRONT_PHOTO:
+                case REQUEST_CODE_BACK_PHOTO:
+                    showImage(requestCode, data);
+                    break;
             }
         }
+
+    private void showImage(int requestCode, Intent data) {
+        try {
+            //Получаем URI изображения, преобразуем его в Bitmap
+            //объект и отображаем в элементе ImageView нашего интерфейса:
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+            switch (requestCode){
+                case REQUEST_CODE_FRONT_PHOTO:
+                    ivPhotoFront.setImageBitmap(selectedImage);
+                    break;
+
+                case REQUEST_CODE_BACK_PHOTO:
+                    ivPhotoBack.setImageBitmap(selectedImage);
+                    break;
+            }
+
+        } catch (FileNotFoundException e) {
+            // Эта ошибка отобразится в случае если не удалось найти изображение
+            e.printStackTrace();
+        }
     }
+
     public void onAddCard(View view) {
 
         Random random = new Random();
         int id = random.nextInt(200000);
         card.setId(id);
-
-        ArrayList<Photo> photos = new ArrayList<>();
-        photos.add(new Photo(R.drawable.card_1_front));
-        photos.add(new Photo(R.drawable.card_1_front));
-        card.setPhotos(photos);
 
         card.setNameCard(nameCard.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
@@ -129,4 +193,26 @@ public class AddCardActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CategoryListActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD_CATEGORY);
     }
+
+    public void onChooseImageFromGallery(int requestCode){
+
+        // Интент для получения всех приложений которые могут отображать изображения
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        // Вызываем системное диалоговое окно для выбора приложения, которое умеет отображать изображения
+        // и возвращать выбранную фотографию
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Выберите изображение");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+        // Запускаем приложения и ожидаем результат
+        startActivityForResult(chooserIntent, requestCode);
+    }
+
+    private File createImageFile(long imageID){
+
+    }
+
 }

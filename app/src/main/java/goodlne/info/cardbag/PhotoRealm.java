@@ -5,13 +5,15 @@ import io.realm.annotations.PrimaryKey;
 
 public class PhotoRealm extends RealmObject {
     @PrimaryKey
-    private int imageID;
+    private long imageID;
 
-    public int getImageID() {
+    public long getImageID() {
+
         return imageID;
     }
 
-    public void setImageID(int imageID) {
+    public void setImageID(long imageID) {
+
         this.imageID = imageID;
     }
 }
