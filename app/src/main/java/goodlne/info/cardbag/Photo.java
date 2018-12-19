@@ -20,16 +20,19 @@ public class Photo implements Parcelable {
 
     protected Photo(Parcel in) {
         imageID = in.readInt();
+
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
         @Override
         public Photo createFromParcel(Parcel in) {
+
             return new Photo(in);
         }
 
         @Override
         public Photo[] newArray(int size) {
+
             return new Photo[size];
         }
     };
@@ -41,11 +44,13 @@ public class Photo implements Parcelable {
 
     @Override
     public int describeContents() {
+
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeLong(imageID);
     }
 }

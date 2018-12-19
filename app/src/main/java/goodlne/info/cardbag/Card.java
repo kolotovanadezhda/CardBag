@@ -12,7 +12,7 @@ public class Card implements Parcelable {
     private String nameCard;
     private Category category;
     private String discount;
-    private List<Photo> photos;
+    public List<Photo> photos;
 
     public Card(int id, String nameCard, Category category, String discount, List<Photo> photos) {
         this.id = id;

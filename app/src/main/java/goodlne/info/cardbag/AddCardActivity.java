@@ -1,20 +1,34 @@
 package goodlne.info.cardbag;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +47,21 @@ public class AddCardActivity extends AppCompatActivity {
     private EditText etCategory;
     private EditText procDiscount;
 
+
+    private File currentImageFile;
+    long currentTime =  System.currentTimeMillis();
+    Photo front = new Photo(currentTime+1);
+    Photo back = new Photo(currentTime+2);
+
     private static final int REQUEST_CODE_FRONT_PHOTO = 1;
     private static final int REQUEST_CODE_BACK_PHOTO = 2;
+    private static final int REQUEST_CODE_IMAGE_CAPTURE=3;
+    private static final int REQUEST_CAMERA_PERMISSION=4;
 
     ImageView ivPhotoFront, ivPhotoBack;
 
-
-
     private static final int REQUEST_CODE_ADD_CATEGORY = 0;
+    private String storageDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +99,10 @@ public class AddCardActivity extends AppCompatActivity {
         ivPhotoFront = findViewById(R.id.ivPhotoFront);
         ivPhotoBack = findViewById(R.id.ivPhotoBack);
 
-        long currentTime = System.currentTimeMillis();
-        Photo front = new Photo(currentTime+1);
-        Photo back = new Photo(currentTime+2);
-        ArrayList<Photo> photos = new ArrayList<>();
-        photos.add(new Photo(R.drawable.card_1_front));
-        photos.add(new Photo(R.drawable.card_1_front));
-        card.setPhotos(photos);
+
+        card.photos = new ArrayList<>();
+        card.photos.add(front);
+        card.photos.add(back);
 
     }
 
@@ -113,6 +131,11 @@ public class AddCardActivity extends AppCompatActivity {
                 case REQUEST_CODE_BACK_PHOTO:
                     showImage(requestCode, data);
                     break;
+                case REQUEST_CODE_IMAGE_CAPTURE:
+                    ivPhotoFront.setImageBitmap(getBitmap());
+                    ivPhotoBack.setImageBitmap(getBitmap());
+                    break;
+
             }
         }
 
@@ -137,6 +160,28 @@ public class AddCardActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             // Эта ошибка отобразится в случае если не удалось найти изображение
             e.printStackTrace();
+        }
+    }
+
+    private void showImageSelectionDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setItems(R.array.attachment_variants, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+
+        if (!isFinishing()) {
+            alertDialog.show();
+        }
+    }
+
+    public void onClick(DialogInterface dialog, int which, int requestCode) {
+        if (which == 0) {
+            onChooseImageFromGallery(requestCode);
+        } else if (which == 1) {
+            takePhoto();
         }
     }
 
@@ -211,8 +256,112 @@ public class AddCardActivity extends AppCompatActivity {
         startActivityForResult(chooserIntent, requestCode);
     }
 
-    private File createImageFile(long imageID){
+    private void takePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            Toast.makeText(this,
+                    "На вашем устройстве недоступна камера",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+
+
+        // Создаём файл для изображения
+        currentImageFile = createImageFile(1);
+
+        if (currentImageFile != null) {
+            // Если файл создался — получаем его URI
+            Uri imageUri = FileProvider.getUriForFile(
+                    this,
+                    BuildConfig.APPLICATION_ID + ".fileprovider",
+                    currentImageFile
+            );
+
+            // Передаём URI в камеру
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
+        }
     }
 
+    private File createImageFile(long imageID){
+        // Генерируем имя файла
+        String filename = System.currentTimeMillis() + ".jpg";
+
+        // Получаем приватную директорию на карте памяти для хранения изображений
+        // Выглядит она примерно так:
+        // /sdcard/Android/data/info.goodline.department.learnandroid./files/Pictures
+        // Директория будет создана автоматически, если ещё не существует
+
+        // Создаём файл
+        File image = new File(storageDir, filename);
+        try {
+            if (image.createNewFile()) {
+                return image;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    private boolean checkCameraGrantedPermission() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean doRequestPermission(int requestCode) {
+        // Запрашиваем права доступа только на Android 6 и выше
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(
+                    this, new String[]{Manifest.permission.CAMERA},
+                    requestCode
+            );
+            return true;
+        }
+        return false;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Здесь обрабатывается результат выдачи прав доступа, которые мы запросили
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takePhoto();
+                }
+                break;
+        }
+    }
+
+    private Bitmap getBitmap() {
+        Bitmap bitmap = BitmapFactory.decodeFile(currentImageFile.getAbsolutePath());
+        try {
+            ExifInterface ei = new ExifInterface(currentImageFile.getAbsolutePath());
+
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return rotateImage(bitmap, 90);
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return rotateImage(bitmap, 180);
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return rotateImage(bitmap, 270);
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    return bitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 }
