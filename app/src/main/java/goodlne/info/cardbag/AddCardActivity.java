@@ -47,21 +47,15 @@ public class AddCardActivity extends AppCompatActivity {
     private EditText etCategory;
     private EditText procDiscount;
 
-
     private File currentImageFile;
-    long currentTime =  System.currentTimeMillis();
-    Photo front = new Photo(currentTime+1);
-    Photo back = new Photo(currentTime+2);
 
     private static final int REQUEST_CODE_FRONT_PHOTO = 1;
     private static final int REQUEST_CODE_BACK_PHOTO = 2;
-    private static final int REQUEST_CODE_IMAGE_CAPTURE=3;
-    private static final int REQUEST_CAMERA_PERMISSION=4;
+    private static final int REQUEST_CAMERA_PERMISSION=3;
 
     ImageView ivPhotoFront, ivPhotoBack;
 
     private static final int REQUEST_CODE_ADD_CATEGORY = 0;
-    private String storageDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,24 +79,22 @@ public class AddCardActivity extends AppCompatActivity {
         findViewById(R.id.flFrontPhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onChooseImageFromGallery(REQUEST_CODE_FRONT_PHOTO);
+
+                showImageSelectionDialog(REQUEST_CODE_FRONT_PHOTO);
             }
         });
 
         findViewById(R.id.flBackPhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onChooseImageFromGallery(REQUEST_CODE_BACK_PHOTO);
+
+                showImageSelectionDialog(REQUEST_CODE_BACK_PHOTO);
             }
         });
 
         ivPhotoFront = findViewById(R.id.ivPhotoFront);
         ivPhotoBack = findViewById(R.id.ivPhotoBack);
 
-
-        card.photos = new ArrayList<>();
-        card.photos.add(front);
-        card.photos.add(back);
 
     }
 
@@ -116,72 +108,27 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_CODE_ADD_CATEGORY:
-                    if (resultCode == RESULT_OK) {
-                        Category category = data.getParcelableExtra(Category.class.getSimpleName());
-                        card.setCategory(category);
-                        etCategory.setText(category.getName());
-                    }
-                    break;
                 case REQUEST_CODE_FRONT_PHOTO:
+                    showImage(requestCode, data);
+                    break;
+
                 case REQUEST_CODE_BACK_PHOTO:
                     showImage(requestCode, data);
                     break;
-                case REQUEST_CODE_IMAGE_CAPTURE:
-                    ivPhotoFront.setImageBitmap(getBitmap());
-                    ivPhotoBack.setImageBitmap(getBitmap());
-                    break;
 
-            }
-        }
-
-    private void showImage(int requestCode, Intent data) {
-        try {
-            //Получаем URI изображения, преобразуем его в Bitmap
-            //объект и отображаем в элементе ImageView нашего интерфейса:
-            final Uri imageUri = data.getData();
-            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-            switch (requestCode){
-                case REQUEST_CODE_FRONT_PHOTO:
-                    ivPhotoFront.setImageBitmap(selectedImage);
-                    break;
-
-                case REQUEST_CODE_BACK_PHOTO:
-                    ivPhotoBack.setImageBitmap(selectedImage);
+                case REQUEST_CODE_ADD_CATEGORY:
+                    Category category = data.getParcelableExtra(Category.class.getSimpleName());
+                    card.setCategory(category);
+                    etCategory.setText(category.getName());
                     break;
             }
-
-        } catch (FileNotFoundException e) {
-            // Эта ошибка отобразится в случае если не удалось найти изображение
-            e.printStackTrace();
-        }
-    }
-
-    private void showImageSelectionDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setItems(R.array.attachment_variants, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create();
-
-        if (!isFinishing()) {
-            alertDialog.show();
-        }
-    }
-
-    public void onClick(DialogInterface dialog, int which, int requestCode) {
-        if (which == 0) {
-            onChooseImageFromGallery(requestCode);
-        } else if (which == 1) {
-            takePhoto();
         }
     }
 
@@ -190,6 +137,13 @@ public class AddCardActivity extends AppCompatActivity {
         Random random = new Random();
         int id = random.nextInt(200000);
         card.setId(id);
+
+        long currentTime =  System.currentTimeMillis();
+        Photo front = new Photo(currentTime+1);
+        Photo back = new Photo(currentTime+2);
+        ArrayList<Photo> photos = new ArrayList<>();
+        photos.add(front);
+        photos.add(back);
 
         card.setNameCard(nameCard.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
@@ -256,7 +210,53 @@ public class AddCardActivity extends AppCompatActivity {
         startActivityForResult(chooserIntent, requestCode);
     }
 
-    private void takePhoto() {
+    private void showImage(int requestCode, Intent data) {
+        try {
+            //Получаем URI изображения, преобразуем его в Bitmap
+            //объект и отображаем в элементе ImageView нашего интерфейса:
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+            switch (requestCode){
+                case REQUEST_CODE_FRONT_PHOTO:
+                    ivPhotoFront.setImageBitmap(selectedImage);
+                    break;
+
+                case REQUEST_CODE_BACK_PHOTO:
+                    ivPhotoBack.setImageBitmap(selectedImage);
+                    break;
+            }
+
+        } catch (FileNotFoundException e) {
+            // Эта ошибка отобразится в случае если не удалось найти изображение
+            e.printStackTrace();
+        }
+    }
+
+    private void showImageSelectionDialog(int requestCode) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setItems(R.array.attachment_variants, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            onChooseImageFromGallery(requestCode);
+                        } else if (which == 1) {
+                            if (!checkCameraGrantedPermission() && doRequestPermission(requestCode))
+                                return;
+
+                            takePhoto(requestCode);
+                        }
+                    }
+                })
+                .create();
+
+        if (!isFinishing()) {
+            alertDialog.show();
+        }
+    }
+
+    private void takePhoto(int requestCode) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (intent.resolveActivity(getPackageManager()) == null) {
@@ -269,7 +269,7 @@ public class AddCardActivity extends AppCompatActivity {
 
 
         // Создаём файл для изображения
-        currentImageFile = createImageFile(1);
+        currentImageFile = createImageFile();
 
         if (currentImageFile != null) {
             // Если файл создался — получаем его URI
@@ -281,20 +281,16 @@ public class AddCardActivity extends AppCompatActivity {
 
             // Передаём URI в камеру
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
+            startActivityForResult(intent, requestCode);
         }
     }
 
-    private File createImageFile(long imageID){
+    private File createImageFile(){
         // Генерируем имя файла
         String filename = System.currentTimeMillis() + ".jpg";
 
-        // Получаем приватную директорию на карте памяти для хранения изображений
-        // Выглядит она примерно так:
-        // /sdcard/Android/data/info.goodline.department.learnandroid./files/Pictures
-        // Директория будет создана автоматически, если ещё не существует
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        // Создаём файл
         File image = new File(storageDir, filename);
         try {
             if (image.createNewFile()) {
@@ -328,40 +324,9 @@ public class AddCardActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    takePhoto();
+                    takePhoto(requestCode);
                 }
                 break;
         }
-    }
-
-    private Bitmap getBitmap() {
-        Bitmap bitmap = BitmapFactory.decodeFile(currentImageFile.getAbsolutePath());
-        try {
-            ExifInterface ei = new ExifInterface(currentImageFile.getAbsolutePath());
-
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_UNDEFINED);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    return rotateImage(bitmap, 90);
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    return rotateImage(bitmap, 180);
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    return rotateImage(bitmap, 270);
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    return bitmap;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-    private Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
     }
 }

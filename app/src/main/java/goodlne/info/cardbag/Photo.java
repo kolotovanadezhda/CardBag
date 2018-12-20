@@ -19,7 +19,7 @@ public class Photo implements Parcelable {
 
 
     protected Photo(Parcel in) {
-        imageID = in.readInt();
+        imageID = in.readLong();
 
     }
 

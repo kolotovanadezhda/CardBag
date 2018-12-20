@@ -77,21 +77,27 @@ tools:context=".AddCardActivity">
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
             android:focusable="true">
 
             <ImageView
                 android:id="@+id/ivPhotoFront"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#333333"
+                android:background="#C0C0C0"
                 android:layout_margin="4dp"/>
 
             <ImageView
                 android:id="@+id/ivTakePhotoFrontCard"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_camera"
                 android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:src="@drawable/str"/>
 
         </FrameLayout>
 
@@ -101,25 +107,58 @@ tools:context=".AddCardActivity">
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="100dp"
+            android:layout_marginRight="15dp"
             android:focusable="true">
 
             <ImageView
                 android:id="@+id/ivPhotoBack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="#C0C0C0"
                 android:layout_margin="4dp"
                 />
 
             <ImageView
                 android:id="@+id/ivTakePhotoBackCard"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_camera"
                 android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:src="@drawable/str"/>
 
         </FrameLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Лицевая сторона"
+            android:textSize="14sp"
+            android:textColor="#9B9B9B"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="19dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Тыльная сторноа"
+            android:textSize="14sp"
+            android:textColor="#9B9B9B"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="19dp"/>
     </LinearLayout>
 
 <Button

@@ -20,7 +20,7 @@
             android:layout_width="180dp"
             android:layout_height="112dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/card_1_front"
+            android:src="@drawable/str"
             />
 
     </android.support.v7.widget.CardView>

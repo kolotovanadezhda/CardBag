@@ -21,13 +21,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
     private LayoutInflater inflater;
     private List<Photo> photos;
     Context context;
-    private File currentImageFile;
-    long currentTime =  System.currentTimeMillis();
-    Photo front = new Photo(currentTime+1);
-    Photo back = new Photo(currentTime+2);
-    private String storageDir;
-
-    ImageView ivPhotoFront, ivPhotoBack;
 
     public PhotoListAdapter(Context context, List<Photo> photos) {
         this.photos = photos;
@@ -46,20 +39,17 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder viewHolder, int position) {
         final Photo photo = photos.get(position);
-        //viewHolder.ivCardFront.setImageDrawable(context.getResources().getDrawable(Math.toIntExact(photo.getImageID())));
         File imgFile = new File(
-                Environment.getExternalStorageDirectory() + "/" +
-                        front.getImageID() + ".jpg",
-                Environment.getExternalStorageDirectory() + "/" +
-                        back.getImageID() + ".jpg"
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" +
+                        photo.getImageID() + ".jpg"
         );
 
         if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            ivPhotoFront.setImageBitmap(myBitmap);
-            ivPhotoBack.setImageBitmap(myBitmap);
+            viewHolder.ivCardFront.setImageBitmap(myBitmap);
             return;
         }
+
     }
 
 
