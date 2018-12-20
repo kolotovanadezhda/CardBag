@@ -20,6 +20,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -28,8 +29,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -144,6 +147,7 @@ public class AddCardActivity extends AppCompatActivity {
         ArrayList<Photo> photos = new ArrayList<>();
         photos.add(front);
         photos.add(back);
+        card.setPhotos(photos);
 
         card.setNameCard(nameCard.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
@@ -157,9 +161,10 @@ public class AddCardActivity extends AppCompatActivity {
         });
         realm.close();
 
-        Intent intent = new Intent(this, CardListActivity.class);
-        startActivity(intent);
-        finish();
+      Intent intent = new Intent();
+      intent.putExtra(Card.class.getSimpleName(), card);
+      setResult(RESULT_OK, intent);
+      finish();
     }
     private CardRealm cardMap2Realm(Card card){
         CardRealm cardRealm = new CardRealm();
@@ -221,10 +226,12 @@ public class AddCardActivity extends AppCompatActivity {
             switch (requestCode){
                 case REQUEST_CODE_FRONT_PHOTO:
                     ivPhotoFront.setImageBitmap(selectedImage);
+
                     break;
 
                 case REQUEST_CODE_BACK_PHOTO:
                     ivPhotoBack.setImageBitmap(selectedImage);
+
                     break;
             }
 
@@ -329,4 +336,5 @@ public class AddCardActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

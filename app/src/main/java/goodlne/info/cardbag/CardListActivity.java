@@ -62,6 +62,26 @@ public class CardListActivity extends AppCompatActivity {
     private RealmResults<CardRealm> getCards() {
         return Realm.getDefaultInstance().where(CardRealm.class).findAll();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_ADD_CARD:
+                    rvCardList.setVisibility(View.VISIBLE);
+                    noCard.setVisibility(View.GONE);
+                    Bundle arg = data.getExtras();
+                    if (arg == null) {
+                        return;
+                    }
+                    Card card = (Card) arg.getParcelable(Card.class.getSimpleName());
+                    if (card == null) {
+                        return;
+                    }
+                    adapter.insertItem(card);
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,10 +91,11 @@ public class CardListActivity extends AppCompatActivity {
     }
     public void onShow(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, REQUEST_CODE_ADD_CARD);
 
     }
+
+
     private List<Card> map2DataList(List<CardRealm> realmList) {
         List<Card> cards = new ArrayList<>();
         for (CardRealm cardRealm : realmList) {
