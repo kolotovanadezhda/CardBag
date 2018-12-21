@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -52,13 +53,15 @@ public class AddCardActivity extends AppCompatActivity {
 
     private File currentImageFile;
 
-    private static final int REQUEST_CODE_FRONT_PHOTO = 1;
-    private static final int REQUEST_CODE_BACK_PHOTO = 2;
-    private static final int REQUEST_CAMERA_PERMISSION=3;
+    private static final int REQUEST_CODE_FRONT_PHOTO = 2;
+    private static final int REQUEST_CODE_BACK_PHOTO = 3;
+    private static final int REQUEST_CAMERA_PERMISSION=4;
+    private static final int REQUEST_ITEM_ATACHMENT_GALLERY=0;
+    private static final int REQUEST_ITEM_ATACHMENT_CAMERA=1;
 
     ImageView ivPhotoFront, ivPhotoBack;
 
-    private static final int REQUEST_CODE_ADD_CATEGORY = 0;
+    private static final int REQUEST_CODE_ADD_CATEGORY = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +78,14 @@ public class AddCardActivity extends AppCompatActivity {
         etCategory = findViewById(R.id.etCategory);
         procDiscount = findViewById(R.id.procDiscount);
 
-        card = new Card();
+        initDefaultCard();
 
+        findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBtnSaveCardClicked(v);
+            }
+        });
 
         // Вешаем на кнопку обработчик нажатий
         findViewById(R.id.flFrontPhoto).setOnClickListener(new View.OnClickListener() {
@@ -101,6 +110,17 @@ public class AddCardActivity extends AppCompatActivity {
 
     }
 
+    private void initDefaultCard() {
+        card = new Card();
+        long currentTime =  System.currentTimeMillis();
+        Photo front = new Photo(currentTime+1);
+        Photo back = new Photo(currentTime+2);
+        ArrayList<Photo> photos = new ArrayList<>();
+        photos.add(front);
+        photos.add(back);
+        card.setPhotos(photos);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
@@ -116,7 +136,6 @@ public class AddCardActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
                     showImage(requestCode, data);
@@ -126,32 +145,36 @@ public class AddCardActivity extends AppCompatActivity {
                     showImage(requestCode, data);
                     break;
 
-                case REQUEST_CODE_ADD_CATEGORY:
-                    Category category = data.getParcelableExtra(Category.class.getSimpleName());
-                    card.setCategory(category);
-                    etCategory.setText(category.getName());
-                    break;
-            }
+                    case REQUEST_CODE_ADD_CATEGORY:
+                        if (resultCode == RESULT_OK) {
+                        Category category = data.getParcelableExtra(Category.class.getSimpleName());
+                        card.setCategory(category);
+                        etCategory.setText(category.getName());
+                        break;
+                }
         }
     }
 
-    public void onAddCard(View view) {
+    public void onBtnSaveCardClicked(View view) {
 
         Random random = new Random();
         int id = random.nextInt(200000);
         card.setId(id);
 
-        long currentTime =  System.currentTimeMillis();
-        Photo front = new Photo(currentTime+1);
-        Photo back = new Photo(currentTime+2);
-        ArrayList<Photo> photos = new ArrayList<>();
-        photos.add(front);
-        photos.add(back);
-        card.setPhotos(photos);
-
         card.setNameCard(nameCard.getText().toString());
         card.setDiscount(procDiscount.getText().toString());
 
+        String folder = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/";
+
+        copyPhoto(
+
+                 folder + card.getPhotos().get(0).getImageID()+ ".jpg",
+                getBitmap(ivPhotoFront)
+        );
+        copyPhoto(
+                folder + card.getPhotos().get(1).getImageID()+".jpg",
+                getBitmap(ivPhotoBack)
+        );
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction(){
 
@@ -166,6 +189,13 @@ public class AddCardActivity extends AppCompatActivity {
       setResult(RESULT_OK, intent);
       finish();
     }
+
+    private Bitmap getBitmap(ImageView iv) {
+        iv.invalidate();
+        BitmapDrawable btmpDrawable = (BitmapDrawable) iv.getDrawable();
+        return btmpDrawable.getBitmap();
+    }
+
     private CardRealm cardMap2Realm(Card card){
         CardRealm cardRealm = new CardRealm();
         cardRealm.setId(card.getId());
@@ -241,18 +271,18 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
-    private void showImageSelectionDialog(int requestCode) {
+    private void showImageSelectionDialog(final int requestCode) {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setItems(R.array.attachment_variants, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            onChooseImageFromGallery(requestCode);
-                        } else if (which == 1) {
-                            if (!checkCameraGrantedPermission() && doRequestPermission(requestCode))
-                                return;
+                        switch (which) {
+                            case REQUEST_ITEM_ATACHMENT_GALLERY:
+                                onChooseImageFromGallery(requestCode);
+                                break;
 
-                            takePhoto(requestCode);
+                            case REQUEST_ITEM_ATACHMENT_CAMERA:
+                                takePhoto(requestCode);
                         }
                     }
                 })
@@ -264,6 +294,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void takePhoto(int requestCode) {
+        long currentTime = System.currentTimeMillis();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (intent.resolveActivity(getPackageManager()) == null) {
@@ -276,7 +307,7 @@ public class AddCardActivity extends AppCompatActivity {
 
 
         // Создаём файл для изображения
-        currentImageFile = createImageFile();
+        currentImageFile = createImageFile(currentTime);
 
         if (currentImageFile != null) {
             // Если файл создался — получаем его URI
@@ -292,9 +323,9 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile(){
+    private File createImageFile(long time){
         // Генерируем имя файла
-        String filename = System.currentTimeMillis() + ".jpg";
+        String filename = time + ".jpg";
 
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
@@ -334,6 +365,15 @@ public class AddCardActivity extends AppCompatActivity {
                     takePhoto(requestCode);
                 }
                 break;
+        }
+    }
+
+    private void copyPhoto(String fileName, Bitmap img) {
+        try (FileOutputStream out = new FileOutputStream(fileName)) {
+            img.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

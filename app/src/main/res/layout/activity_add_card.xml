@@ -167,7 +167,6 @@ tools:context=".AddCardActivity">
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:background="#009788"
-    android:onClick="onAddCard"
     android:text="Сохранить карту"
     android:textColor="#FFFFFF"
     android:textSize="17sp">
