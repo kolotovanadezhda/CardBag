@@ -33,4 +33,10 @@ public final class CategoryMapper {
         return categories;
 
     }
+    public static CategoryRealm categoryMap2Realm(Category category) {
+        CategoryRealm categoryRealm = new CategoryRealm();
+        categoryRealm.setId(category.getId());
+        categoryRealm.setName(category.getName());
+        return categoryRealm;
+    }
 }

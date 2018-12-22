@@ -179,7 +179,7 @@ public class AddCardActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction(){
 
             public void execute(Realm realm){
-                    realm.copyToRealmOrUpdate(cardMap2Realm(card));
+                    realm.copyToRealmOrUpdate(CardMapper.cardMap2Realm(card));
             }
         });
         realm.close();
@@ -225,33 +225,6 @@ public class AddCardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bitmap;
-    }
-
-    private CardRealm cardMap2Realm(Card card){
-        CardRealm cardRealm = new CardRealm();
-        cardRealm.setId(card.getId());
-        cardRealm.setNameCard(card.getNameCard());
-        cardRealm.setDiscount(card.getDiscount());
-        cardRealm.setCategory(categoryMap2Realm(card.getCategory()));
-        cardRealm.setPhotos(photoMap2Realm(card.getPhotos()));
-        return cardRealm;
-    }
-
-    private CategoryRealm categoryMap2Realm(Category category) {
-        CategoryRealm categoryRealm = new CategoryRealm();
-        categoryRealm.setId(category.getId());
-        categoryRealm.setName(category.getName());
-        return categoryRealm;
-    }
-    private RealmList<PhotoRealm> photoMap2Realm(List <Photo> photo)
-    {
-        RealmList <PhotoRealm> photoRealm = new RealmList<>();
-        for(Photo photos: photo) {
-            PhotoRealm photoRealm1 = new PhotoRealm();
-            photoRealm1.setImageID(photos.getImageID());
-            photoRealm.add(photoRealm1);
-        }
-        return photoRealm;
     }
 
     public void onCategoryClick(View view) {

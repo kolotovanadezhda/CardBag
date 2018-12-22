@@ -18,4 +18,13 @@ public final class CardMapper {
         }
         return cards;
     }
+    public static CardRealm cardMap2Realm(Card card){
+        CardRealm cardRealm = new CardRealm();
+        cardRealm.setId(card.getId());
+        cardRealm.setNameCard(card.getNameCard());
+        cardRealm.setDiscount(card.getDiscount());
+        cardRealm.setCategory(CategoryMapper.categoryMap2Realm(card.getCategory()));
+        cardRealm.setPhotos(PhotoMapper.photoMap2Realm(card.getPhotos()));
+        return cardRealm;
+    }
 }
