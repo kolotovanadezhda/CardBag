@@ -196,12 +196,6 @@ public class AddCardActivity extends AppCompatActivity {
         return btmpDrawable.getBitmap();
     }
 
-    private Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
     private Bitmap getBitmap() {
         Bitmap bitmap = BitmapFactory.decodeFile(currentImageFile.getAbsolutePath());
         try {
@@ -225,6 +219,13 @@ public class AddCardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     private CardRealm cardMap2Realm(Card card){
@@ -328,6 +329,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 break;
 
                             case REQUEST_ITEM_ATACHMENT_CAMERA:
+                                if (!checkCameraGrantedPermission() && doRequestPermission(REQUEST_CAMERA_PERMISSION))
+                                    return;
                                 takePhoto(requestCode);
                         }
                     }

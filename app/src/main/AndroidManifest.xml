@@ -3,6 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="goodlne.info.cardbag">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -22,6 +32,7 @@
         <activity android:name=".CategoryListActivity">
 
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -36,11 +47,4 @@
 
 
     </application>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
-
 </manifest>
