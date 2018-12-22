@@ -20,6 +20,8 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static goodlne.info.cardbag.CardMapper.map2DataList;
+
 public class CardListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -44,7 +46,7 @@ public class CardListActivity extends AppCompatActivity {
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
 
-        cards = map2DataList(getCards());
+        cards = CardMapper.map2DataList(getCards());
 
         if (cards == null || cards.isEmpty()){
             rvCardList.setVisibility(View.GONE);
@@ -95,37 +97,4 @@ public class CardListActivity extends AppCompatActivity {
 
     }
 
-
-    private List<Card> map2DataList(List<CardRealm> realmList) {
-        List<Card> cards = new ArrayList<>();
-        for (CardRealm cardRealm : realmList) {
-            Card card = new Card (
-                    cardRealm.getId(),
-                    cardRealm.getNameCard(),
-                    categoryMap2Data(cardRealm.getCategory()),
-                    cardRealm.getDiscount(),
-                    (ArrayList) photoMap2Data(cardRealm.getPhotos())
-            );
-            cards.add(card);
-        }
-        return cards;
-    }
-
-    private List<Photo> photoMap2Data(List<PhotoRealm> realmList) {
-        List<Photo> photos = new ArrayList<>();
-        for (PhotoRealm photoRealm : realmList) {
-            Photo photo = new Photo(
-                    photoRealm.getImageID()
-            );
-            photos.add(photo);
-        }
-        return photos;
-    }
-
-    private Category categoryMap2Data(CategoryRealm categoryRealm) {
-        Category category = new Category();
-        category.setId(categoryRealm.getId());
-        category.setName(categoryRealm.getName());
-        return category;
-    }
 }

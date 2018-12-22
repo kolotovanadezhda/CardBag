@@ -47,7 +47,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
         if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             viewHolder.ivCardFront.setImageBitmap(myBitmap);
-            return;
         }
 
     }

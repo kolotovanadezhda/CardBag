@@ -54,7 +54,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         }
 
         categoriesLocal = getCategoriesFromLocal();
-        categories = map2DataList(categoriesLocal);
+        categories = CategoryMapper.map2DataList(categoriesLocal);
 
        CategoryListAdapter adapter = new CategoryListAdapter(this, categoriesRest, this);
        recyclerView.setAdapter(adapter);
@@ -69,31 +69,8 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         return DataBaseHelper.categories;
     }
 
-    private List<CategoryRealm> map2RealmList(List<Category> categories) {
-        List<CategoryRealm> realmList = new ArrayList<>();
-        for(Category category : categories){
-            CategoryRealm categoryRealm = new CategoryRealm();
-            categoryRealm.setId(category.getId());
-            categoryRealm.setName(category.getName());
-            realmList.add(categoryRealm);
-        }
-
-        return realmList;
-    }
-    private List <Category> map2DataList(List<CategoryRealm> realmList) {
-        List<Category> categories = new ArrayList<>();
-        for(CategoryRealm categoryRealm : realmList) {
-            Category category = new Category(
-                    categoryRealm.getId(),
-                    categoryRealm.getName()
-            );
-            categories.add(category);
-        }
-        return categories;
-
-    }
     private void addCategories(List<Category>  list) {
-       final List<CategoryRealm> realmList = map2RealmList(list);
+       final List<CategoryRealm> realmList = CategoryMapper.map2RealmList(list);
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
