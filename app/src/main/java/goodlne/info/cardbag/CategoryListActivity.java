@@ -49,10 +49,6 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
             return;
         }
 
-        if (categoriesRest != null){
-            addCategories(categoriesRest);
-        }
-
         categoriesLocal = getCategoriesFromLocal();
         categories = CategoryMapper.map2DataList(categoriesLocal);
 

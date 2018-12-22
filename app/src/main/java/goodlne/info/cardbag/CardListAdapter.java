@@ -48,6 +48,10 @@ public class CardListAdapter extends RecyclerView.Adapter<CardViewHolder> {
         cards.add(item);
         notifyDataSetChanged();
     }
+    public void setData(List<Card> data){
+        cards = data;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

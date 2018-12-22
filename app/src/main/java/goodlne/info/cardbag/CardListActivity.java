@@ -21,6 +21,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static goodlne.info.cardbag.CardMapper.map2DataList;
+import static io.realm.Realm.getDefaultInstance;
 
 public class CardListActivity extends AppCompatActivity {
 
@@ -46,8 +47,6 @@ public class CardListActivity extends AppCompatActivity {
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
 
-        cards = CardMapper.map2DataList(getCards());
-
         if (cards == null || cards.isEmpty()){
             rvCardList.setVisibility(View.GONE);
             noCard.setVisibility(View.VISIBLE);
@@ -60,14 +59,29 @@ public class CardListActivity extends AppCompatActivity {
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
     }
-
-    private RealmResults<CardRealm> getCards() {
-        return Realm.getDefaultInstance().where(CardRealm.class).findAll();
+    public void showCardList(boolean enableList ) {
+        // Если enableList равно true, то отобразить список карточек (View.VISIBLE)
+        rvCardList.setVisibility(enableList ? View.VISIBLE : View.GONE);
     }
+    private void loadCardList() {
+        RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
+        if (result.isEmpty()) {
+            // Карточек нет
+            showCardList(false);
+            return;
+        }
+
+        List<Card> cards = CardMapper.map2DataList(result);
+        adapter.setData(cards);
+        showCardList(true);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CARD:
                     rvCardList.setVisibility(View.VISIBLE);
@@ -82,7 +96,6 @@ public class CardListActivity extends AppCompatActivity {
                     }
                     adapter.insertItem(card);
             }
-        }
     }
 
     @Override
