@@ -196,6 +196,37 @@ public class AddCardActivity extends AppCompatActivity {
         return btmpDrawable.getBitmap();
     }
 
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+    private Bitmap getBitmap() {
+        Bitmap bitmap = BitmapFactory.decodeFile(currentImageFile.getAbsolutePath());
+        try {
+            ExifInterface ei = new ExifInterface(currentImageFile.getAbsolutePath());
+
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return rotateImage(bitmap, 90);
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return rotateImage(bitmap, 180);
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return rotateImage(bitmap, 270);
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    return bitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
     private CardRealm cardMap2Realm(Card card){
         CardRealm cardRealm = new CardRealm();
         cardRealm.setId(card.getId());
@@ -246,28 +277,43 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void showImage(int requestCode, Intent data) {
-        try {
-            //Получаем URI изображения, преобразуем его в Bitmap
-            //объект и отображаем в элементе ImageView нашего интерфейса:
-            final Uri imageUri = data.getData();
-            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-            switch (requestCode){
+        if(data==null){
+            switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
-                    ivPhotoFront.setImageBitmap(selectedImage);
+                    ivPhotoFront.setImageBitmap(getBitmap());
 
                     break;
-
                 case REQUEST_CODE_BACK_PHOTO:
-                    ivPhotoBack.setImageBitmap(selectedImage);
-
+                    ivPhotoBack.setImageBitmap(getBitmap());
                     break;
-            }
 
-        } catch (FileNotFoundException e) {
-            // Эта ошибка отобразится в случае если не удалось найти изображение
-            e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                //Получаем URI изображения, преобразуем его в Bitmap
+                //объект и отображаем в элементе ImageView нашего интерфейса:
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                switch (requestCode) {
+                    case REQUEST_CODE_FRONT_PHOTO:
+                        ivPhotoFront.setImageBitmap(selectedImage);
+
+                        break;
+
+                    case REQUEST_CODE_BACK_PHOTO:
+                        ivPhotoBack.setImageBitmap(selectedImage);
+
+                        break;
+                }
+
+            } catch (FileNotFoundException e) {
+                // Эта ошибка отобразится в случае если не удалось найти изображение
+                e.printStackTrace();
+            }
         }
     }
 
