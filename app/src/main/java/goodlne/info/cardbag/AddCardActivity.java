@@ -278,7 +278,7 @@ public class AddCardActivity extends AppCompatActivity {
 
     private void showImage(int requestCode, Intent data) {
 
-        if(data==null){
+        if(data==null || data.getData() == null){
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
                     ivPhotoFront.setImageBitmap(getBitmap());
