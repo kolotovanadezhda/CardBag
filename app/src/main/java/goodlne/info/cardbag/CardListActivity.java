@@ -56,6 +56,7 @@ public class CardListActivity extends AppCompatActivity {
     public void showCardList(boolean enableList ) {
         // Если enableList равно true, то отобразить список карточек (View.VISIBLE)
         rvCardList.setVisibility(enableList ? View.VISIBLE : View.GONE);
+        noCard.setVisibility(enableList ? View.GONE : View.VISIBLE);
     }
     private void loadCardList() {
         RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
@@ -65,7 +66,7 @@ public class CardListActivity extends AppCompatActivity {
             return;
         }
 
-        List<Card> cards = CardMapper.map2DataList(result);
+        cards = CardMapper.map2DataList(result);
         adapter.setData(cards);
         showCardList(true);
     }
