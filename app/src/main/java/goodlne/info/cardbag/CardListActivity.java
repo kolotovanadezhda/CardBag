@@ -50,6 +50,8 @@ public class CardListActivity extends AppCompatActivity {
 
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
+
+        loadCardList();
     }
     public void showCardList(boolean enableList ) {
         // Если enableList равно true, то отобразить список карточек (View.VISIBLE)
