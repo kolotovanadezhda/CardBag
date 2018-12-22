@@ -47,14 +47,6 @@ public class CardListActivity extends AppCompatActivity {
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
 
-        if (cards == null || cards.isEmpty()){
-            rvCardList.setVisibility(View.GONE);
-            noCard.setVisibility(View.VISIBLE);
-        }
-        else {
-            rvCardList.setVisibility(View.VISIBLE);
-            noCard.setVisibility(View.GONE);
-        }
 
         adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);

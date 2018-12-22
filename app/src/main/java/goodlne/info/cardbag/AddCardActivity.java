@@ -301,6 +301,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 break;
 
                             case REQUEST_ITEM_ATACHMENT_CAMERA:
+                                if(!checkCameraGrantedPermission() && doRequestPermission(REQUEST_CAMERA_PERMISSION))
+                                    return;
                                 takePhoto(requestCode);
                         }
                     }
