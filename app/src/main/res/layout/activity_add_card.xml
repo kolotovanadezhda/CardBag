@@ -1,85 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="#EDEDED"
+android:orientation="vertical"
+tools:context=".AddCardActivity">
+
+
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDEDED"
-    android:orientation="vertical"
-    tools:context=".AddCardActivity">
+    android:layout_height="wrap_content"
+    android:background="#FAFAFA"
+    android:minHeight="?android:attr/actionBarSize"/>
 
+<android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:paddingTop="15dp">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <EditText
+        android:id="@+id/nameCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FAFAFA"
-        android:minHeight="?android:attr/actionBarSize"/>
+        android:hint="Название карты"
+        android:maxLines="1"/>
+</android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+<android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:paddingTop="15dp">
+
+    <EditText
+        android:id="@+id/etCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp">
-
-        <EditText
-            android:id="@+id/nameCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Название карты"
-            android:maxLines="1"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/btnCategory"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp"
+        android:hint="Категория"
         android:drawableEnd="@drawable/shape"
         android:onClick="onCategoryClick"
-        android:text="Категории"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="#9B9B9B"
-        android:textSize="18sp" />
+        />
+</android.support.design.widget.TextInputLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9B9B9B"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp" />
+<android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:paddingTop="15dp">
 
-    <android.support.design.widget.TextInputLayout
+    <EditText
+        android:id="@+id/procDiscount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:paddingTop="15dp">
+        android:hint="Процент скидки"
+        android:inputType="number" />
+</android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/procDiscount"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/flFrontPhoto"
+            android:clickable="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivPhotoFront"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#C0C0C0"
+                android:layout_margin="4dp"/>
+
+            <ImageView
+                android:id="@+id/ivTakePhotoFrontCard"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_camera"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:src="@drawable/str"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flBackPhoto"
+            android:clickable="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:layout_marginRight="15dp"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivPhotoBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#C0C0C0"
+                android:layout_margin="4dp"
+                />
+
+            <ImageView
+                android:id="@+id/ivTakePhotoBackCard"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_camera"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:src="@drawable/str"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Процент скидки"
-            android:inputType="number" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_weight="1"
+            android:text="Лицевая сторона"
+            android:textSize="14sp"
+            android:textColor="#9B9B9B"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="19dp"/>
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Тыльная сторноа"
+            android:textSize="14sp"
+            android:textColor="#9B9B9B"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="19dp"/>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="#009788"
-        android:onClick="onAddCard"
-        android:text="Сохранить"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp">
-    </Button>
+<Button
+    android:id="@+id/btnSave"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="#009788"
+    android:text="Сохранить карту"
+    android:textColor="#FFFFFF"
+    android:textSize="17sp">
+</Button>
 
 </LinearLayout>
