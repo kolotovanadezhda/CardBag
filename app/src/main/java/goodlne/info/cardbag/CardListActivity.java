@@ -43,15 +43,15 @@ public class CardListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Мои карты");
 
         noCard = findViewById(R.id.NoCard);
+        noCard.setVisibility(View.VISIBLE);
 
         rvCardList = findViewById(R.id.rvCard);
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
 
+        loadCardList();
 
-        adapter = new CardListAdapter(this, cards);
         rvCardList.setAdapter(adapter);
 
-        loadCardList();
     }
     public void showCardList(boolean enableList ) {
         // Если enableList равно true, то отобразить список карточек (View.VISIBLE)
@@ -67,28 +67,21 @@ public class CardListActivity extends AppCompatActivity {
         }
 
         cards = CardMapper.map2DataList(result);
-        adapter.setData(cards);
+        adapter = new CardListAdapter(this, cards);
         showCardList(true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
+        if (resultCode != RESULT_OK || data.getExtras() == null) {
             return;
         }
             switch (requestCode) {
                 case REQUEST_CODE_ADD_CARD:
-                    rvCardList.setVisibility(View.VISIBLE);
-                    noCard.setVisibility(View.GONE);
+                    showCardList(true);
                     Bundle arg = data.getExtras();
-                    if (arg == null) {
-                        return;
-                    }
-                    Card card = (Card) arg.getParcelable(Card.class.getSimpleName());
-                    if (card == null) {
-                        return;
-                    }
+                    Card card =(Card) arg.getParcelable(Card.class.getSimpleName());
                     adapter.insertItem(card);
             }
     }
