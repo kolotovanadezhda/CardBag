@@ -66,6 +66,7 @@ public class CardListActivity extends AppCompatActivity {
             return;
         }
 
+        cards=new ArrayList<>();
         cards = CardMapper.map2DataList(result);
         adapter = new CardListAdapter(this, cards);
         showCardList(true);
